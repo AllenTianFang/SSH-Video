@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+	<struts>
+	
+	<constant name="struts.i18n.encoding" value="UTF-8"></constant>
+	<constant name="struts.action.extension" value="action,do,"></constant>
+	<constant name="struts.devMode" value="true"></constant> 
+	
+	<!-- 后台拦截器 -->
+	<package name="adminInterceptor" namespace="/adminInterceptor" extends="json-default">
+	<interceptors>
+	<interceptor name="adminInterceptor" class="com.zhiyou100.ssh_video.web.interceptor.AdminInterceptor"/>
+	<interceptor-stack name="adminStack">
+	<interceptor-ref name="defaultStack"></interceptor-ref>
+	<interceptor-ref name="adminInterceptor">
+	<param name="excludeMethods">index,login</param>
+	</interceptor-ref>
+	</interceptor-stack>
+	</interceptors>
+	<default-interceptor-ref name="adminStack"></default-interceptor-ref>
+	<global-results>
+	<result name="index">/WEB-INF/view/admin/index.jsp</result>
+	</global-results>
+	</package>
+	
+	
+	<!-- 前台拦截器 -->
+	<package name="frontInterceptor" namespace="/frontInterceptor" extends="json-default">
+	<interceptors>
+	<interceptor name="frontInterceptor" class="com.zhiyou100.ssh_video.web.interceptor.FrontInterceptor"/>
+	<interceptor-stack name="frontStack">
+	<interceptor-ref name="defaultStack"></interceptor-ref>
+	<interceptor-ref name="frontInterceptor">
+	<param name="excludeMethods">forgetpwd,sendemail,forgetpwd2,resetpwd,regist,login,index,videoData,state</param>
+	</interceptor-ref>
+	</interceptor-stack>
+	</interceptors>
+	<default-interceptor-ref name="frontStack"></default-interceptor-ref>
+	<global-results>
+	<result name="index">/WEB-INF/view/front/index.jsp</result>
+	</global-results>
+	</package>
+	
+	
+	<!-- 后台登录 -->
+	<package name="welcomeAdmin" namespace="/admin" extends="adminInterceptor">
+	
+	<action name="index" class="AdminWelcomeAction" method="index">
+	<result>/WEB-INF/view/admin/index.jsp</result>
+	</action>
+	
+	<action name="adminLogout" class="AdminWelcomeAction" method="adminLogout">
+	<result>/WEB-INF/view/admin/index.jsp</result>
+	</action>
+	
+	<action name="login" class="AdminWelcomeAction" method="login">
+	<result type="redirectAction" >
+             <param name="actionName">video</param>
+             <param name="namespace">/admin/video</param>
+    </result>
+	<result name="fail">/WEB-INF/view/admin/index.jsp</result>
+	</action>
+	
+	</package>
+	
+	<!-- video模块 -->
+	<package name="video" namespace="/admin/video" extends="adminInterceptor">
+	
+	<action name="video" class="AdminVideoAction" method="videoList">
+	<result>/WEB-INF/view/admin/video/video.jsp</result>
+	</action>
+	
+    <action name="addVideo" class="AdminVideoAction" method="addVideo">
+    <result>/WEB-INF/view/admin/video/addVideo.jsp</result>
+	</action>
+	
+	<action name="add" class="AdminVideoAction" method="add">
+    <result type="redirectAction">
+             <param name="actionName">video</param>
+             <param name="namespace">/admin/video</param>
+    </result>
+	</action>
+	
+	<action name="updateVideo" class="AdminVideoAction" method="updateVideo">
+    <result>/WEB-INF/view/admin/video/updateVideo.jsp</result>
+	</action>
+	
+	<action name="update" class="AdminVideoAction" method="update">
+    <result type="redirectAction">
+             <param name="actionName">video</param>
+             <param name="namespace">/admin/video</param>
+    </result>
+	</action>
+	
+	<action name="deleteVideo" class="AdminVideoAction" method="deleteVideo">
+    <result type="json">
+    <param name="root">message</param>
+    </result>
+	</action>
+	
+	<action name="update" class="AdminVideoAction" method="update">
+    <result type="redirectAction">
+             <param name="actionName">video</param>
+             <param name="namespace">/admin/video</param>
+    </result>
+	</action>
+	
+	<action name="multiDeleteVideo" class="AdminVideoAction" method="multiDeleteVideo">
+    <result type="redirectAction">
+             <param name="actionName">video</param>
+             <param name="namespace">/admin/video</param>
+    </result>
+	</action>
+	</package>
+	
+	<!-- speaker模块 -->
+	<package name="speaker" namespace="/admin/speaker" extends="adminInterceptor">
+	
+	<action name="speaker" class="AdminSpeakerAction" method="speakerList">
+	<result>/WEB-INF/view/admin/speaker/speaker.jsp</result>
+	</action>
+	
+	<action name="addSpeaker" class="AdminSpeakerAction" method="addSpeaker">
+	<result>/WEB-INF/view/admin/speaker/addSpeaker.jsp</result>
+	</action>
+	
+	<action name="add" class="AdminSpeakerAction" method="add">
+	<result type="redirectAction">
+             <param name="actionName">speaker</param>
+             <param name="namespace">/admin/speaker</param>
+    </result>
+	</action>
+	
+	<action name="updateSpeaker" class="AdminSpeakerAction" method="updateSpeaker">
+	<result>/WEB-INF/view/admin/speaker/updateSpeaker.jsp</result>
+	</action>
+	
+	<action name="update" class="AdminSpeakerAction" method="update">
+	<result type="redirectAction">
+             <param name="actionName">speaker</param>
+             <param name="namespace">/admin/speaker</param>
+    </result>
+	</action>
+	
+	<action name="deleteSpeaker" class="AdminSpeakerAction" method="deleteSpeaker">
+	<result type="json">
+	<param name="root">message</param>
+	</result>
+	</action>
+	
+	</package>
+	
+	<!-- course模块 -->
+	<package name="course" namespace="/admin/course" extends="adminInterceptor">
+	
+	<action name="course" class="AdminCourseAction" method="courseList">
+	<result>/WEB-INF/view/admin/course/course.jsp</result>
+	</action>
+	
+	<action name="addCourse" class="AdminCourseAction" method="addCourse">
+	<result>/WEB-INF/view/admin/course/addCourse.jsp</result>
+	</action>
+	
+	<action name="add" class="AdminCourseAction" method="add">
+	<result type="redirectAction">
+             <param name="actionName">course</param>
+             <param name="namespace">/admin/course</param>
+    </result>
+	</action>
+	
+	<action name="updateCourse" class="AdminCourseAction" method="updateCourse">
+	<result>/WEB-INF/view/admin/course/updateCourse.jsp</result>
+	</action>
+	
+	<action name="update" class="AdminCourseAction" method="update">
+	<result type="redirectAction">
+             <param name="actionName">course</param>
+             <param name="namespace">/admin/course</param>
+    </result>
+	</action>
+	
+	<action name="deleteCourse" class="AdminCourseAction" method="deleteCourse">
+	<result type="json">
+	<param name="root">message</param>
+	</result>
+	</action>
+	
+	</package>
+	
+	<!-- 统计分析模块 -->
+	<package name="statistic" namespace="/admin/statistic" extends="adminInterceptor">
+	
+	<action name="statistic" class="AdminStatisticAction" method="statistic">
+	<result>/WEB-INF/view/admin/statistic/statistic.jsp</result>
+	</action>
+	
+	<action name="statisticAjax" class="AdminStatisticAction" method="statisticAjax">
+	<result type="json">
+	<param name="root">result</param>
+	</result>
+	</action>
+	</package>
+	
+	<!-- 前台course模块 -->
+	<package name="frontCourse" namespace="/front/course" extends="frontInterceptor">
+	<action name="index" class="FrontCourseAction" method="index">
+	<result>/WEB-INF/view/front/course/index.jsp</result>
+	</action>
+	</package>
+	
+	<!-- 前台video模块 -->
+	<package name="frontVideo" namespace="/front/video" extends="frontInterceptor">
+	
+	<action name="index" class="FrontVideoAction" method="index">
+	<result>/WEB-INF/view/front/video/index.jsp</result>
+	</action>
+	
+	<action name="videoData" class="FrontVideoAction" method="videoData">
+	<result>/WEB-INF/view/front/video/content.jsp</result>
+	</action>
+	
+	<action name="state" class="FrontVideoAction" method="state">
+	<result type="json"></result>
+	</action>
+	</package>
+	
+	
+	<!-- 前台欢迎界面 -->
+	<package name="welcomeFront" namespace="/front" extends="json-default">
+	<action name="index" class="FrontWelcomeAction" method="index">
+	<result>/WEB-INF/view/front/index.jsp</result>
+	</action>
+	</package> 
+	
+	<!-- 前台用户模块 -->
+	<package name="frontUser" namespace="/front/user" extends="frontInterceptor">
+	<action name="regist" class="FrontUserAction" method="regist">
+	<result type="json">
+	<param name="root">result</param>
+	</result>
+	</action>
+	
+	<action name="login" class="FrontUserAction" method="login">
+	<result type="json">
+	<param name="root">result</param>
+	</result>
+	</action>
+	
+	<action name="logout" class="FrontUserAction" method="logout">
+	<result type="redirect">/index.jsp</result>
+	</action>
+	
+	<action name="logoutUser" class="FrontUserAction" method="logoutUser">
+	<result type="redirect">/index.jsp</result>
+	</action> 
+	
+	<action name="user" class="FrontUserAction" method="user">
+	<result>/WEB-INF/view/front/user/index.jsp</result>
+	</action>
+	
+	<action name="profile" class="FrontUserAction" method="profile">
+	<result>/WEB-INF/view/front/user/profile.jsp</result>
+	</action>
+	<action name="profile2" class="FrontUserAction" method="profile2">
+	<result type="chain">
+	         <param name="actionName">user</param>
+             <param name="namespace">/front/user</param>
+	</result>
+	</action>
+	
+	<action name="avatar" class="FrontUserAction" method="avatar">
+	<result>/WEB-INF/view/front/user/avatar.jsp</result>
+	</action>
+	<action name="avatar2" class="FrontUserAction" method="avatar2">
+	<result type="chain">
+	         <param name="actionName">user</param>
+             <param name="namespace">/front/user</param>
+	</result>
+	</action>
+	
+	<action name="password" class="FrontUserAction" method="password">
+	<result>/WEB-INF/view/front/user/password.jsp</result>
+	</action>
+	<action name="passwordJuge" class="FrontUserAction" method="passwordJuge">
+	<result type="json">
+	<param name="root">result</param>
+	</result>
+	</action>
+	<action name="password2" class="FrontUserAction" method="password2">
+	<result type="chain">
+	         <param name="actionName">logout</param>
+             <param name="namespace">/front/user</param>
+	</result>
+	</action>
+	
+	<!-- 忘记密码模块 -->
+	<action name="forgetpwd" class="FrontUserAction" method="forgetpwd">
+	<result>/WEB-INF/view/front/user/forget_pwd.jsp</result>
+	</action>
+	
+	<action name="sendemail" class="FrontUserAction" method="sendemail">
+	<result type="json">
+	<param name="root">result</param>
+	</result>
+	</action>
+	
+	<action name="forgetpwd2" class="FrontUserAction" method="forgetpwd2">
+	<result>/WEB-INF/view/front/user/reset_pwd.jsp</result>
+	<result name="fail">/WEB-INF/view/front/user/forget_pwd.jsp</result>
+	</action>
+	
+	<action name="resetpwd" class="FrontUserAction" method="resetpwd">
+	<result>/WEB-INF/view/front/index.jsp</result>
+	</action>
+	
+	</package>
+	
+	
+	</struts>
